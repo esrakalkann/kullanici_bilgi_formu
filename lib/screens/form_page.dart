@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:user_info_form/models.dart/user_model.dart';
+import 'package:user_info_form/screens/info_sum.dart';
 
 class FormScreen extends StatefulWidget {
   const FormScreen({super.key});
@@ -27,6 +28,14 @@ class _FormScreenState extends State<FormScreen> {
         isAgreed: _isAgreed,
       );
 
+      Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (context) => InfoSum(user: userModel),
+  ),
+);
+
+
       print("Form sent: ${userModel.fullName}");
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -36,9 +45,13 @@ class _FormScreenState extends State<FormScreen> {
           ),
         ),
       );
-    }
-  }
 
+      
+    }
+
+    
+  }
+    
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,6 +71,7 @@ class _FormScreenState extends State<FormScreen> {
                 onSaved: (String? value) {
                   // This optional block of code can be used to run
                   // code when the user saves the form.
+                  _fullName = value ?? '';
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -73,6 +87,10 @@ class _FormScreenState extends State<FormScreen> {
                   hintText:
                       'Please enter the amount of money you want to withdraw',
                 ),
+                onSaved: (String? value) {
+                  _amount = value ?? '';
+                },
+
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -98,14 +116,13 @@ class _FormScreenState extends State<FormScreen> {
               ),
 
               CheckboxListTile(
-                title: const Text("I agree to the terms and conditions"),
+                title: const Text("I agree to terms and conditions"),
                 value: _isAgreed,
                 onChanged: (value) {
-                    setState(() { 
-                      _isAgreed = value ?? false;
-
-                });
-              },
+                  setState(() {
+                    _isAgreed = value ?? false;
+                  });
+                },
               ),
               ElevatedButton(
                 onPressed: _submitForm,
