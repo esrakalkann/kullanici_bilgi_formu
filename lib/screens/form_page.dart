@@ -16,7 +16,7 @@ class _FormScreenState extends State<FormScreen> {
   String _amount = '';
   String _gender = 'female';
   bool _isAgreed = false;
-  bool _notificationsEnabled= false;
+  bool _notificationsEnabled = false;
 
   void _submitForm() {
     if (_formKey.currentState!.validate() && _isAgreed) {
@@ -31,12 +31,9 @@ class _FormScreenState extends State<FormScreen> {
       );
 
       Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (context) => InfoSum(user: userModel),
-  ),
-);
-
+        context,
+        MaterialPageRoute(builder: (context) => InfoSum(user: userModel)),
+      );
 
       print("Form sent: ${userModel.fullName}");
     } else {
@@ -47,13 +44,9 @@ class _FormScreenState extends State<FormScreen> {
           ),
         ),
       );
-
-      
     }
-
-    
   }
-    
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,6 +72,10 @@ class _FormScreenState extends State<FormScreen> {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your name';
                   }
+                    final words = value.trim().split(' ');
+  if (words.length < 2) {
+    return 'Please enter both name and surname';
+  }
                   return null;
                 },
               ),
@@ -96,7 +93,11 @@ class _FormScreenState extends State<FormScreen> {
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your name';
+                    return 'Miktar giriniz';
+                  }
+                  final number = double.tryParse(value);
+                  if (number == null || number <= 0) {
+                    return 'Geçerli bir miktar giriniz';
                   }
                   return null;
                 },
@@ -116,7 +117,7 @@ class _FormScreenState extends State<FormScreen> {
                   });
                 },
               ),
-
+              //CheckboxListTile içinde validator kullanılamaz çünkü CheckboxListTile doğrudan bir FormField widget’ı değildir. 
               CheckboxListTile(
                 title: const Text("I agree to terms and conditions"),
                 value: _isAgreed,
@@ -124,6 +125,7 @@ class _FormScreenState extends State<FormScreen> {
                   setState(() {
                     _isAgreed = value ?? false;
                   });
+            
                 },
               ),
               ElevatedButton(
@@ -134,11 +136,9 @@ class _FormScreenState extends State<FormScreen> {
               SwitchListTile(
                 title: const Text("Enable Notifications"),
                 value: _notificationsEnabled,
-                onChanged: (value) => setState(() => _notificationsEnabled = value),
-
-
+                onChanged: (value) =>
+                    setState(() => _notificationsEnabled = value),
               ),
-              
             ],
           ),
         ),
