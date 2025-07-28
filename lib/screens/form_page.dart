@@ -16,6 +16,7 @@ class _FormScreenState extends State<FormScreen> {
   String _amount = '';
   String _gender = 'female';
   bool _isAgreed = false;
+  bool _notificationsEnabled= false;
 
   void _submitForm() {
     if (_formKey.currentState!.validate() && _isAgreed) {
@@ -26,6 +27,7 @@ class _FormScreenState extends State<FormScreen> {
         amount: _amount,
         gender: _gender,
         isAgreed: _isAgreed,
+        notificationsEnabled: _notificationsEnabled,
       );
 
       Navigator.push(
@@ -128,6 +130,15 @@ class _FormScreenState extends State<FormScreen> {
                 onPressed: _submitForm,
                 child: const Text("Submit"),
               ),
+
+              SwitchListTile(
+                title: const Text("Enable Notifications"),
+                value: _notificationsEnabled,
+                onChanged: (value) => setState(() => _notificationsEnabled = value),
+
+
+              ),
+              
             ],
           ),
         ),
