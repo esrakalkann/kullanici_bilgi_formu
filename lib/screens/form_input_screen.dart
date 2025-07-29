@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:user_info_form/models.dart/user_model.dart';
-import 'package:user_info_form/screens/info_sum.dart';
+import 'package:user_info_form/models/user_form_model.dart';
+import 'package:user_info_form/screens/form_summary_screen.dart';
+import 'package:user_info_form/theme/app_theme.dart';
 
 class FormScreen extends StatefulWidget {
-  const FormScreen({super.key});
-
+    final UserModel? user;
+  const FormScreen({super.key,this.user});
+  
   @override
   State<FormScreen> createState() => _FormScreenState();
 }
@@ -50,18 +52,20 @@ class _FormScreenState extends State<FormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Form Screen")),
+      appBar: AppBar(title: const Text("Kullanıcı Bilgileri")),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: ListView(
+
             children: [
+             
               TextFormField(
                 decoration: const InputDecoration(
-                  //icon: Icon(Icons.person),
+                  icon: Icon(Icons.person),
                   //hintText: 'What do people call you?',
-                  labelText: 'Full Name *',
+                  labelText: 'İsim Soyisim *',
                 ),
                 onSaved: (String? value) {
                   // This optional block of code can be used to run
@@ -70,21 +74,23 @@ class _FormScreenState extends State<FormScreen> {
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your name';
+                    return 'Lütfen isim ve soyisminizi giriniz';
                   }
-                    final words = value.trim().split(' ');
-  if (words.length < 2) {
-    return 'Please enter both name and surname';
-  }
+                  final words = value.trim().split(' ');
+                  if (words.length < 2) {
+                    return 'Lütfen isim ve soyisminizi giriniz';
+                  }
                   return null;
                 },
               ),
+               const SizedBox(height: 16),
               //Flutterdocs Widget TextFormField üzerindeki örnek ile
               TextFormField(
                 decoration: const InputDecoration(
-                  labelText: 'Amount *',
+                  labelText: 'Miktar *',
+                  icon: Icon(Icons.money_sharp),
                   hintText:
-                      'Please enter the amount of money you want to withdraw',
+                      'Lütfen çekmek istediğiniz miktarı giriniz',
                 ),
                 onSaved: (String? value) {
                   _amount = value ?? '';
@@ -93,51 +99,59 @@ class _FormScreenState extends State<FormScreen> {
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Miktar giriniz';
+                    return 'Lütfen miktar giriniz';
                   }
                   final number = double.tryParse(value);
                   if (number == null || number <= 0) {
-                    return 'Geçerli bir miktar giriniz';
+                    return 'Lütfen geçerli bir miktar';
                   }
                   return null;
                 },
               ),
-
+   const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: "Gender"),
+                
                 value: _gender,
                 items: const [
-                  DropdownMenuItem(value: 'female', child: Text('Female')),
-                  DropdownMenuItem(value: 'male', child: Text('Male')),
-                  DropdownMenuItem(value: 'other', child: Text('Other')),
+                  DropdownMenuItem(value: 'female', child: Text('Kadın'),),
+                  
+                  DropdownMenuItem(value: 'male', child: Text('Erkek')),
+                  DropdownMenuItem(value: 'other', child: Text('Diğer')),
                 ],
                 onChanged: (value) {
                   setState(() {
                     _gender = value ?? 'female';
+                    
                   });
+                  
                 },
               ),
-              //CheckboxListTile içinde validator kullanılamaz çünkü CheckboxListTile doğrudan bir FormField widget’ı değildir. 
+               const SizedBox(height: 16),
+              //CheckboxListTile içinde validator kullanılamaz çünkü CheckboxListTile doğrudan bir FormField widget’ı değildir.
               CheckboxListTile(
-                title: const Text("I agree to terms and conditions"),
+                title: const Text("Sözleşmeyi kabul ediyorum"),
                 value: _isAgreed,
                 onChanged: (value) {
                   setState(() {
                     _isAgreed = value ?? false;
                   });
-            
                 },
               ),
               ElevatedButton(
                 onPressed: _submitForm,
-                child: const Text("Submit"),
+                child: const Text("Kaydet"),
               ),
 
               SwitchListTile(
-                title: const Text("Enable Notifications"),
+                title: const Text("Bildirimlere izin ver"),
                 value: _notificationsEnabled,
+                
                 onChanged: (value) =>
                     setState(() => _notificationsEnabled = value),
+                    activeColor: AppTheme.secondaryColor,
+                    secondary: const Icon(Icons.notifications_active),
+                    
               ),
             ],
           ),
