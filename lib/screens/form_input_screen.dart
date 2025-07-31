@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:user_info_form/models/user_form_model.dart';
 import 'package:user_info_form/screens/form_summary_screen.dart';
 import 'package:user_info_form/theme/app_theme.dart';
+import 'package:user_info_form/widgets/custom_text_field.dart';
 
 class FormScreen extends StatefulWidget {
-    final UserModel? user;
-  const FormScreen({super.key,this.user});
-  
+  final UserModel? user;
+  const FormScreen({super.key, this.user});
+
   @override
   State<FormScreen> createState() => _FormScreenState();
 }
@@ -58,20 +59,11 @@ class _FormScreenState extends State<FormScreen> {
         child: Form(
           key: _formKey,
           child: ListView(
-
             children: [
-             
-              TextFormField(
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.person),
-                  //hintText: 'What do people call you?',
-                  labelText: 'İsim Soyisim *',
-                ),
-                onSaved: (String? value) {
-                  // This optional block of code can be used to run
-                  // code when the user saves the form.
-                  _fullName = value ?? '';
-                },
+              CustomTextField(
+                hint: 'What do people call you?',
+                label: 'İsim Soyisim *',
+
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Lütfen isim ve soyisminizi giriniz';
@@ -82,16 +74,21 @@ class _FormScreenState extends State<FormScreen> {
                   }
                   return null;
                 },
+                keyboardType: TextInputType.numberWithOptions(),
+                onSaved: (value) {
+                  // This optional block of code can be used to run
+                  // code when the user saves the form.
+                  _fullName = value ?? '';
+                },
               ),
-               const SizedBox(height: 16),
+              const SizedBox(height: 16),
               //Flutterdocs Widget TextFormField üzerindeki örnek ile
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Miktar *',
-                  icon: Icon(Icons.money_sharp),
-                  hintText:
-                      'Lütfen çekmek istediğiniz miktarı giriniz',
-                ),
+              CustomTextField(
+                //decoration: const InputDecoration(
+                  label: 'Miktar *',
+                 // icon: Icon(Icons.money_sharp),
+                  hint: 'Lütfen çekmek istediğiniz miktarı giriniz',
+                
                 onSaved: (String? value) {
                   _amount = value ?? '';
                 },
@@ -108,26 +105,24 @@ class _FormScreenState extends State<FormScreen> {
                   return null;
                 },
               ),
-   const SizedBox(height: 16),
+              const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: "Gender"),
-                
+
                 value: _gender,
                 items: const [
-                  DropdownMenuItem(value: 'female', child: Text('Kadın'),),
-                  
+                  DropdownMenuItem(value: 'female', child: Text('Kadın')),
+
                   DropdownMenuItem(value: 'male', child: Text('Erkek')),
                   DropdownMenuItem(value: 'other', child: Text('Diğer')),
                 ],
                 onChanged: (value) {
                   setState(() {
                     _gender = value ?? 'female';
-                    
                   });
-                  
                 },
               ),
-               const SizedBox(height: 16),
+              const SizedBox(height: 16),
               //CheckboxListTile içinde validator kullanılamaz çünkü CheckboxListTile doğrudan bir FormField widget’ı değildir.
               CheckboxListTile(
                 title: const Text("Sözleşmeyi kabul ediyorum"),
@@ -146,12 +141,11 @@ class _FormScreenState extends State<FormScreen> {
               SwitchListTile(
                 title: const Text("Bildirimlere izin ver"),
                 value: _notificationsEnabled,
-                
+
                 onChanged: (value) =>
                     setState(() => _notificationsEnabled = value),
-                    activeColor: AppTheme.secondaryColor,
-                    secondary: const Icon(Icons.notifications_active),
-                    
+                activeColor: AppTheme.secondaryColor,
+                secondary: const Icon(Icons.notifications_active),
               ),
             ],
           ),
