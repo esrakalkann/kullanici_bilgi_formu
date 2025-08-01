@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Bilgi Formu',
       theme: AppTheme.lightTheme,
-      home: const FormScreen(),
+      home: const FormInputScreen(),
     );
   }
 }
